@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Loader2 } from 'lucide-react';
+import Link from 'next/link';
+import { Loader2, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import {
@@ -18,6 +19,40 @@ import { CurrentBatchStatus } from '@/components/CurrentBatchStatus';
 import { post } from '@/lib/api/client';
 import { useToast } from '@/contexts/ToastContext';
 import type { APIError } from '@/types/api';
+
+// Navigation cards configuration
+const navigationCards = [
+  {
+    title: 'Data Confirmation',
+    description: 'View completeness checks and issues',
+    href: '/data-confirmation',
+  },
+  {
+    title: 'File Uploads',
+    description: 'Upload portfolio and other files',
+    href: '/file-uploads',
+  },
+  {
+    title: 'Instruments',
+    description: 'Manage instrument master data',
+    href: '/instruments',
+  },
+  {
+    title: 'Index Prices',
+    description: 'Manage index price data',
+    href: '/index-prices',
+  },
+  {
+    title: 'Approvals',
+    description: 'Review and approve batches',
+    href: '/approvals',
+  },
+  {
+    title: 'Process Logs',
+    description: 'View file and calculation logs',
+    href: '/process-logs',
+  },
+];
 
 export default function HomePage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -133,11 +168,34 @@ export default function HomePage() {
           {/* Quick Navigation Section */}
           <section aria-label="Quick Navigation" className="space-y-4">
             <h2 className="text-xl font-semibold">Quick Navigation</h2>
-            <Card className="p-6">
-              <p className="text-muted-foreground">
-                Quick navigation options will appear here.
-              </p>
-            </Card>
+            <ul
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+              role="list"
+            >
+              {navigationCards.map((card) => (
+                <li key={card.href}>
+                  <Link
+                    href={card.href}
+                    aria-label={card.title}
+                    className="block h-full rounded-lg transition-all hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                  >
+                    <Card className="h-full p-6 hover:shadow-lg hover:border-primary/50 transition-all cursor-pointer">
+                      <div className="flex items-start justify-between">
+                        <div className="space-y-2">
+                          <h3 className="font-semibold text-lg">
+                            {card.title}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            {card.description}
+                          </p>
+                        </div>
+                        <ArrowRight className="size-5 text-muted-foreground flex-shrink-0 ml-2" />
+                      </div>
+                    </Card>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </section>
 
           {/* Batch History Section */}
