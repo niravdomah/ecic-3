@@ -1,97 +1,84 @@
 {
   "epic": 1,
-  "story": 2,
-  "storyTitle": "Create New Batch",
-  "reviewDate": "2026-02-04T14:02:00Z",
+  "story": 3,
+  "storyTitle": "Current Batch Status Display",
+  "reviewedAt": "2026-02-04T15:52:00Z",
   "reviewer": "code-reviewer",
   "filesReviewed": [
+    "web/src/components/CurrentBatchStatus.tsx",
+    "web/src/components/ui/skeleton.tsx",
+    "web/src/types/report-batch.ts",
+    "web/src/lib/api/report-batches.ts",
     "web/src/app/page.tsx",
-    "web/src/__tests__/integration/epic-1-story-2-create-new-batch.test.tsx",
-    "web/src/components/ui/dialog.tsx",
-    "web/src/components/ui/popover.tsx",
-    "web/src/components/ui/sonner.tsx",
-    "web/package.json"
+    "web/src/__tests__/integration/epic-1-story-3-current-batch-status.test.tsx",
+    "web/src/__tests__/integration/epic-1-story-1-home-page-setup.test.tsx"
   ],
   "automatedChecks": {
-    "build": {
-      "status": "PASS",
-      "note": "TypeScript compilation successful"
-    },
-    "lint": {
-      "status": "PASS",
-      "note": "No linting errors"
-    },
-    "tests": {
-      "status": "FAIL",
-      "note": "Story 2 tests pass (24/24), but Story 1 tests fail (17/17) - regression issue"
-    },
-    "testQuality": {
-      "status": "PASS",
-      "note": "Test quality validator passed"
-    }
+    "build": "PASS - TypeScript compilation successful",
+    "lint": "PASS - No ESLint violations",
+    "tests": "PASS - All 149 tests passing (33 new tests for this story)",
+    "errorSuppressions": "PASS - No error suppressions found"
   },
-  "criticalIssues": [
+  "criticalIssues": [],
+  "highPriorityIssues": [],
+  "mediumPriorityIssues": [
     {
-      "severity": "CRITICAL",
-      "category": "REGRESSION",
-      "title": "Story 2 implementation broke Story 1 tests",
-      "description": "Adding useToast() hook to page.tsx causes all Story 1 tests to fail because they don't wrap the component in ToastProvider",
-      "location": "web/src/app/page.tsx:25",
-      "impact": "All 17 tests from Story 1 are now failing. This is a test regression that must be fixed.",
-      "recommendation": "Update Story 1 test file (epic-1-story-1-home-page-setup.test.tsx) to use the same TestWrapper pattern with ToastProvider that Story 2 tests use. This is a test-only fix - no production code changes needed."
+      "category": "Test Quality",
+      "severity": "Medium",
+      "issue": "Act() warnings in epic-1-story-1 tests",
+      "description": "Tests in epic-1-story-1-home-page-setup.test.tsx show React act() warnings due to async state updates in CurrentBatchStatus component. Tests pass but console warnings appear.",
+      "affectedFiles": ["web/src/__tests__/integration/epic-1-story-1-home-page-setup.test.tsx"],
+      "recommendation": "These warnings are minor and don't affect test correctness. The Story 3 tests properly handle async updates with waitFor(). Story 1 tests could be updated in a future cleanup epic, but this is not blocking."
     }
   ],
-  "highPriorityIssues": [],
   "suggestions": [
     {
-      "category": "CODE_QUALITY",
-      "title": "Consider extracting dialog state logic",
-      "description": "The dialog management logic in page.tsx could be extracted into a custom hook for better reusability",
-      "location": "web/src/app/page.tsx",
-      "recommendation": "Not blocking for this story, but consider for future refactoring"
+      "category": "Code Organization",
+      "suggestion": "Consider extracting date formatting utilities",
+      "description": "formatDate() and formatBatchName() could be extracted to a shared utilities file if they're needed elsewhere",
+      "affectedFiles": ["web/src/components/CurrentBatchStatus.tsx"]
+    },
+    {
+      "category": "Feature Enhancement",
+      "suggestion": "Action buttons are currently non-functional placeholders",
+      "description": "The three action buttons (Go to Data Confirmation, View File Uploads, View Logs) don't have onClick handlers yet. This is intentional per the story scope.",
+      "affectedFiles": ["web/src/components/CurrentBatchStatus.tsx"],
+      "note": "Expected to be implemented in future stories"
     }
   ],
   "positiveFindings": [
-    "No error suppressions (@ts-expect-error, @ts-ignore, eslint-disable)",
-    "Proper TypeScript typing throughout",
-    "Uses API client from lib/api/client.ts (no raw fetch)",
-    "Uses Shadcn UI components (Dialog, Input, Label, Button)",
-    "Implements all acceptance criteria from story file",
-    "Proper error handling with specific error messages",
-    "Loading states with spinner and disabled buttons",
-    "Accessibility attributes (aria-busy, aria-labelledby, aria-modal)",
-    "Story 2 tests follow best practices (user-observable behavior, no implementation details)",
-    "Test quality validator passes with no anti-patterns detected",
-    "Proper use of Toast notifications for user feedback",
-    "Dialog closes on success, stays open on error per requirements",
-    "Network error vs API error differentiation"
+    "Excellent TypeScript usage - strict mode compliance with no any types",
+    "Zero error suppressions - all issues properly addressed",
+    "Comprehensive test coverage - 33 tests covering happy path, edge cases, error handling, and accessibility",
+    "API integration correctly matches OpenAPI spec (GET /report-batches endpoint and response schema)",
+    "Proper use of Shadcn UI components (Card, Button, Skeleton)",
+    "Excellent accessibility implementation - ARIA labels, semantic HTML, screen reader support",
+    "Clean separation of concerns - types, API functions, and components in appropriate directories",
+    "Proper error handling with retry functionality",
+    "Loading and empty states properly implemented",
+    "Client component correctly marked with 'use client' directive",
+    "Tests focus on user-observable behavior, not implementation details",
+    "Good use of accessibility-first query methods (getByRole, getByLabelText)"
   ],
-  "testCoverage": {
-    "story2Tests": {
-      "total": 24,
-      "passed": 24,
-      "failed": 0,
-      "categories": [
-        "Happy Path (8 tests)",
-        "Edge Cases (5 tests)",
-        "Error Handling (5 tests)",
-        "Accessibility (6 tests)"
-      ]
-    },
-    "regressionTests": {
-      "story1Tests": {
-        "total": 17,
-        "passed": 0,
-        "failed": 17,
-        "note": "All failing due to missing ToastProvider in test setup"
-      }
-    }
+  "apiSpecCompliance": {
+    "endpoint": "/report-batches",
+    "method": "GET",
+    "specMatch": "VERIFIED",
+    "details": "Implementation correctly matches MonthlyAPIDefinition.yaml. Endpoint path, HTTP method, and response schema (MonthlyReportBatchRead) all align with spec."
   },
-  "verdict": "FAIL",
-  "reason": "Critical regression: Story 2 implementation broke all Story 1 tests. Must fix test setup before proceeding.",
-  "nextSteps": [
-    "Fix Story 1 test file to wrap HomePage in ToastProvider",
-    "Re-run all tests to verify fix",
-    "Proceed to VERIFY phase after tests pass"
-  ]
+  "testQuality": {
+    "totalTests": 33,
+    "coverage": [
+      "Happy path - active batch display with all UI elements",
+      "Edge cases - no active batch, multiple batches, completed batches",
+      "Loading states with skeleton UI",
+      "Error handling with retry functionality",
+      "Workflow status mapping for all 6 stages",
+      "Accessibility compliance (3 tests with axe, ARIA attributes verified)"
+    ],
+    "antiPatternCheck": "PASS - No implementation detail testing detected",
+    "queryUsage": "EXCELLENT - Proper use of getByRole, getByLabelText, getByText hierarchy"
+  },
+  "recommendation": "APPROVED",
+  "summary": "Implementation is production-ready. Code quality is excellent with comprehensive testing, proper TypeScript usage, and full OpenAPI spec compliance. Minor act() warnings in existing tests are cosmetic and non-blocking."
 }

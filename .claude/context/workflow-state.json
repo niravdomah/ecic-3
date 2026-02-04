@@ -2,7 +2,7 @@
   "featureName": "InvestInsight-Product-Guide-v2",
   "specPath": "documentation\\InvestInsight-Product-Guide-v2.md",
   "currentEpic": 1,
-  "currentStory": 3,
+  "currentStory": 4,
   "currentPhase": "REALIGN",
   "epics": {
     "1": {
@@ -15,7 +15,7 @@
           "phase": "COMPLETE"
         },
         "3": {
-          "phase": "PENDING"
+          "phase": "COMPLETE"
         },
         "4": {
           "phase": "PENDING"
@@ -126,7 +126,42 @@
       "story": 2,
       "from": "VERIFY",
       "to": "COMPLETE"
+    },
+    {
+      "timestamp": "2026-02-04T11:24:57.311Z",
+      "epic": 1,
+      "story": 3,
+      "from": "PENDING",
+      "to": "SPECIFY"
+    },
+    {
+      "timestamp": "2026-02-04T11:32:11.112Z",
+      "epic": 1,
+      "story": 3,
+      "from": "SPECIFY",
+      "to": "IMPLEMENT"
+    },
+    {
+      "timestamp": "2026-02-04T11:51:22.830Z",
+      "epic": 1,
+      "story": 3,
+      "from": "IMPLEMENT",
+      "to": "REVIEW"
+    },
+    {
+      "timestamp": "2026-02-04T11:53:51.999Z",
+      "epic": 1,
+      "story": 3,
+      "from": "REVIEW",
+      "to": "VERIFY"
+    },
+    {
+      "timestamp": "2026-02-04T12:28:44.309Z",
+      "epic": 1,
+      "story": 3,
+      "from": "VERIFY",
+      "to": "COMPLETE"
     }
   ],
-  "lastUpdated": "2026-02-04T10:27:35.937Z"
+  "lastUpdated": "2026-02-04T12:28:44.310Z"
 }

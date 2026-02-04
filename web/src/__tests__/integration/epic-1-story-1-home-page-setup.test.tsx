@@ -7,12 +7,18 @@
  * Tests for Home Page Setup - InvestInsight Start Page.
  * Epic 1, Story 1: Foundation & Start Page
  */
-import { render, screen, within } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { render, screen, within, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
 import { axe } from 'vitest-axe';
 import HomePage from '@/app/page';
 import { ToastProvider } from '@/contexts/ToastContext';
 import { ToastContainer } from '@/components/toast/ToastContainer';
+
+// Mock the API client
+vi.mock('@/lib/api/client', () => ({
+  get: vi.fn().mockResolvedValue({ MonthlyReportBatches: [] }),
+  post: vi.fn(),
+}));
 
 // Wrapper component to provide context (required since Story 2 added toast functionality)
 function TestWrapper({ children }: { children: React.ReactNode }) {
@@ -185,6 +191,14 @@ describe('HomePage - Start Page Layout', () => {
   describe('Accessibility', () => {
     it('has no accessibility violations', async () => {
       const { container } = renderWithProviders(<HomePage />);
+      // Wait for async content to load
+      await waitFor(() => {
+        expect(
+          screen.getByText(
+            /no active batch\. create a new batch to get started\./i,
+          ),
+        ).toBeInTheDocument();
+      });
       const results = await axe(container);
       expect(results).toHaveProperty('violations');
       expect(results.violations).toHaveLength(0);

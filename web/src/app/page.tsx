@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { CurrentBatchStatus } from '@/components/CurrentBatchStatus';
 import { post } from '@/lib/api/client';
 import { useToast } from '@/contexts/ToastContext';
 import type { APIError } from '@/types/api';
@@ -118,11 +119,7 @@ export default function HomePage() {
                 Create New Batch
               </Button>
             </div>
-            <Card className="p-6">
-              <p className="text-muted-foreground">
-                Batch status information will appear here.
-              </p>
-            </Card>
+            <CurrentBatchStatus />
           </section>
 
           {/* Quick Navigation Section */}
