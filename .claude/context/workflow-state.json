@@ -1,0 +1,97 @@
+{
+  "featureName": "InvestInsight-Product-Guide-v2",
+  "specPath": "documentation\\InvestInsight-Product-Guide-v2.md",
+  "currentEpic": 1,
+  "currentStory": 2,
+  "currentPhase": "REALIGN",
+  "epics": {
+    "1": {
+      "phase": "STORIES",
+      "stories": {
+        "1": {
+          "phase": "COMPLETE"
+        },
+        "2": {
+          "phase": "PENDING"
+        },
+        "3": {
+          "phase": "PENDING"
+        },
+        "4": {
+          "phase": "PENDING"
+        },
+        "5": {
+          "phase": "PENDING"
+        }
+      },
+      "totalStories": 5
+    }
+  },
+  "history": [
+    {
+      "timestamp": "2026-02-04T08:46:58.965Z",
+      "epic": 1,
+      "story": null,
+      "from": "NONE",
+      "to": "DESIGN",
+      "note": "Workflow initialized"
+    },
+    {
+      "timestamp": "2026-02-04T09:05:08.344Z",
+      "epic": 1,
+      "story": null,
+      "from": "DESIGN",
+      "to": "SCOPE"
+    },
+    {
+      "timestamp": "2026-02-04T09:08:37.404Z",
+      "epic": 1,
+      "story": null,
+      "from": "SCOPE",
+      "to": "STORIES"
+    },
+    {
+      "timestamp": "2026-02-04T09:14:45.678Z",
+      "epic": 1,
+      "story": 1,
+      "from": "PENDING",
+      "to": "REALIGN"
+    },
+    {
+      "timestamp": "2026-02-04T09:15:15.489Z",
+      "epic": 1,
+      "story": 1,
+      "from": "REALIGN",
+      "to": "SPECIFY"
+    },
+    {
+      "timestamp": "2026-02-04T09:21:15.143Z",
+      "epic": 1,
+      "story": 1,
+      "from": "SPECIFY",
+      "to": "IMPLEMENT"
+    },
+    {
+      "timestamp": "2026-02-04T09:29:54.099Z",
+      "epic": 1,
+      "story": 1,
+      "from": "IMPLEMENT",
+      "to": "REVIEW"
+    },
+    {
+      "timestamp": "2026-02-04T09:33:55.588Z",
+      "epic": 1,
+      "story": 1,
+      "from": "REVIEW",
+      "to": "VERIFY"
+    },
+    {
+      "timestamp": "2026-02-04T09:35:41.533Z",
+      "epic": 1,
+      "story": 1,
+      "from": "VERIFY",
+      "to": "COMPLETE"
+    }
+  ],
+  "lastUpdated": "2026-02-04T09:35:41.533Z"
+}
