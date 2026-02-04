@@ -323,6 +323,14 @@ AskUserQuestion({
 
 **After fixes:** Re-run automated checks (`npm run lint && npm run build && npm test`) and prompt for manual verification again.
 
+**CRITICAL: Re-verification must use the COMPLETE original checklist.**
+
+When re-presenting the verification checklist after a fix:
+- **DO:** Present the full original checklist with ALL items
+- **DON'T:** Present a narrowed checklist focused only on the fix
+
+**Why this matters:** The user may have only reported the *first* issue they encountered. A console error might appear before they could test a button click. If you present a narrowed checklist, you remove their opportunity to report additional issues they hadn't yet tested.
+
 **Context management:**
 - **1-2 small fixes:** Stay in current session (context is helpful)
 - **3+ issues or complex fixes:** Recommend `/clear` after fixes, before re-review

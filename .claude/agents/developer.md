@@ -124,7 +124,8 @@ After implementation, **always offer the user a chance to preview the app**:
    ```
 
 4. **Wait for feedback** - If the user reports issues, fix them immediately before committing
-5. **This catches issues early** - Changes requested during preview have much smaller impact
+5. **After fixing any issue, re-present the COMPLETE verification checklist** - The user may have only reported the first issue they encountered (e.g., a console error before they could test a button). Never present a narrowed checklist focused only on the fix.
+6. **This catches issues early** - Changes requested during preview have much smaller impact
 
 ### Phase 4: Commit Preparation
 
