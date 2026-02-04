@@ -314,6 +314,12 @@ See `_feature-overview.md` in `generated-docs/stories/` for the lightweight inde
 - Safe to close and reopen VSCode
 - Type `/continue` to resume
 
+### For Epic Completion (IMPORTANT):
+- **Epic completion is a session checkpoint** - always ask about context clearing
+- The workflow state file (`workflow-state.json`) preserves all progress
+- Clearing context before the next epic prevents confusion from stale implementation details
+- Especially important when the session was already continued from a compacted conversation
+
 ---
 
 ## Troubleshooting

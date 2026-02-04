@@ -267,6 +267,48 @@ You can re-run any agent at any time:
 
 ---
 
+## Session Management
+
+### Epic Completion Checkpoints
+
+**Epic completion is a session management checkpoint, not just a workflow transition.**
+
+When an epic completes (all stories reach COMPLETE phase):
+
+1. Claude should **STOP** and offer context clearing before the next epic
+2. The workflow state file (`workflow-state.json`) preserves all progress
+3. Clearing context prevents confusion from stale implementation details
+
+### When to Clear Context
+
+| Situation | Recommendation |
+|-----------|----------------|
+| Epic just completed | Offer context clearing before next epic |
+| Session continued from compacted conversation | Strongly recommend clearing |
+| Epic involved major refactoring | Recommend clearing |
+| Simple epic with few stories | Optional, ask user preference |
+
+### What's Preserved vs. Lost
+
+**Preserved (in workflow-state.json):**
+- Current epic and story numbers
+- Phase for each epic/story
+- History of all phase transitions
+
+**Lost (when clearing context):**
+- Previous conversation content
+- Implementation details from earlier work
+- File contents that were read
+
+**Why this is OK:** The workflow state file is the source of truth. Claude can reconstruct context by reading the state file and relevant source files.
+
+### Commands
+
+- `/status` - Shows current position and suggests context clearing if epic is complete
+- `/continue` - Offers context clearing at epic boundaries before resuming
+
+---
+
 ## Additional Resources
 
 - [Example 1: Full Workflow](./examples/example-1-full-workflow.md) - Complete step-by-step walkthrough

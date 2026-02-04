@@ -163,6 +163,25 @@ Review the code for [STORY NAME]
 /quality-check
 ```
 
+## Session Management
+
+### Epic Completion = Session Checkpoint
+
+When an epic completes, Claude will offer to clear context before starting the next epic. This is recommended because:
+
+- **Progress is preserved:** The workflow state file tracks all progress
+- **Fresh context:** Prevents confusion from stale implementation details
+- **Better focus:** Clean context for the new epic's requirements
+
+### When to Accept Context Clearing
+
+| Situation | Recommendation |
+|-----------|----------------|
+| Epic completed normally | Accept if next epic is different domain |
+| Session already continued from compaction | Strongly recommended |
+| Epic involved major refactoring | Recommended |
+| Quick, simple epic | Optional |
+
 ## Common Questions
 
 **Q: Can I skip the planning phase?**
@@ -176,6 +195,9 @@ A: Just describe what you want. Claude Code can suggest layouts, use Shadcn UI c
 
 **Q: Why does the feature-planner pause for approval?**
 A: To ensure you're aligned on scope and priorities before investing time in detailed planning or implementation.
+
+**Q: Why does Claude offer to clear context at epic boundaries?**
+A: Epic completion is a natural breakpoint. Clearing context prevents old implementation details from causing confusion in the next epic, while the workflow state file preserves all progress.
 
 ## Getting Help
 

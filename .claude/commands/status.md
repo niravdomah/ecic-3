@@ -81,6 +81,35 @@ Action: Run /continue to resume workflow
 /quality-check - Run all quality gates
 ```
 
+### If Epic Just Completed (transitioning to next epic)
+
+When an epic is COMPLETE and there are more epics to go, add a context clearing suggestion:
+
+```
+=== Workflow Status ===
+
+Feature: documentation/my-feature.md
+
+=== Epic Progress ===
+
+Epic                  | Phase    | Stories      | Current Story
+--------------------- | -------- | ------------ | ---------------
+epic-1-dashboard      | COMPLETE | 3/3 complete | -
+epic-2-payments       | PENDING  | 0/? defined  | -
+
+=== Session Checkpoint ===
+
+Epic 1 is complete! This is a good point to consider clearing context:
+- Workflow progress is preserved in workflow-state.json
+- Clearing context prevents confusion from stale implementation details
+- Run /continue to be asked about context clearing before Epic 2
+
+=== Commands ===
+
+/continue      - Resume workflow (will offer context clearing)
+/quality-check - Run all quality gates
+```
+
 ### If All Complete
 
 ```

@@ -136,6 +136,48 @@ Report actual exit codes truthfully. Never rationalize failures as "expected" or
 
 `npm run test:quality` must always pass. Anti-patterns in test files (even skipped tests) will fail CI/CD. In TDD, failing tests create expected TypeScript errors, but this still counts as a failed quality gate until implementation is complete.
 
+### 8. Manual Verification Is Required
+
+**Automated tests are not a substitute for manual verification.** Before marking any story as COMPLETE:
+
+1. **STOP** after automated quality gates pass
+2. **ASK** the user to perform manual verification, or offer to outline what should be verified
+3. **NEVER** transition directly from IMPLEMENT → COMPLETE just because tests pass
+
+Manual verification catches issues that tests cannot:
+- Visual/layout problems
+- Real API integration issues (tests use mocks)
+- UX flow issues
+- Edge cases not covered by tests
+- Browser-specific behavior
+
+**The workflow phases exist for a reason:**
+- IMPLEMENT → REVIEW (code review + manual verification)
+- REVIEW → VERIFY (automated quality gates)
+- VERIFY → COMPLETE (only after both manual and automated verification)
+
+Do not conflate "all tests pass" with "story is complete." They are different things.
+
+### 9. Context Clearing at Major Milestones
+
+**Major milestones are session management checkpoints.** When an epic completes:
+
+1. **STOP** and recognize this is a natural breakpoint
+2. **ASK** the user if they want to clear context before starting the next epic
+3. **EXPLAIN** the benefits: workflow-state.json preserves progress, fresh context prevents old implementation details from causing confusion
+
+**Why this matters:**
+- Sessions that run out of context mid-epic are disruptive
+- The workflow state file captures all progress - nothing is lost by clearing
+- Starting a new epic with clean context improves focus and reduces errors
+
+**When to offer context clearing:**
+- Epic completion (all stories COMPLETE)
+- Before starting `/start` for a new epic
+- When the session was already continued from a compacted conversation
+
+Do not treat epic completion as purely a workflow state transition. It is also a session state checkpoint.
+
 ## Testing Strategy
 
 ### Focus on Integration Tests

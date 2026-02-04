@@ -103,8 +103,25 @@ Before invoking `developer`, run `npm test` in `/web` to identify failing tests 
 
 The transition script determines what's next:
 - More stories in epic → Proceed to REALIGN for next story
-- No more stories but more epics → Proceed to STORIES for next epic
+- No more stories but more epics → **STOP and offer context clearing** (see below), then proceed to STORIES for next epic
 - No more stories and no more epics → Display success message - feature complete!
+
+### Epic Completion Checkpoint (CRITICAL)
+
+**When an epic completes (all stories COMPLETE), this is a session management checkpoint:**
+
+1. **STOP** before proceeding to the next epic
+2. **ASK** the user if they want to clear context before continuing:
+   > "Epic [N] is complete! This is a good checkpoint to clear context if you'd like a fresh start for the next epic.
+   > - Workflow progress is preserved in `workflow-state.json`
+   > - Clearing context helps prevent confusion from stale implementation details
+   > - Would you like to clear context before continuing with Epic [N+1]?"
+3. **EXPLAIN** that nothing is lost - all progress is tracked in the state file
+
+**This is especially important when:**
+- The session was already continued from a compacted conversation
+- The epic involved significant refactoring or architectural changes
+- Multiple complex stories were implemented
 
 ## Step 5: Remind Agent to Update State
 
@@ -152,6 +169,7 @@ Example error handling:
 - Ask user to confirm state before proceeding
 - Commit work before handing off to the next agent
 - Remind agents to use the transition script
+- **Offer context clearing when an epic completes** (this is a session checkpoint)
 
 ## DON'T
 
@@ -159,6 +177,7 @@ Example error handling:
 - Skip state validation
 - Trust artifact detection over the state file
 - Proceed if the user says the state is wrong
+- **Skip the context clearing checkpoint at epic completion** (treat it as purely a workflow transition)
 
 ## Related Commands
 
