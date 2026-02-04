@@ -1,132 +1,97 @@
 {
   "epic": 1,
-  "story": 1,
-  "storyTitle": "Home Page Setup",
+  "story": 2,
+  "storyTitle": "Create New Batch",
+  "reviewDate": "2026-02-04T14:02:00Z",
+  "reviewer": "code-reviewer",
   "filesReviewed": [
     "web/src/app/page.tsx",
-    "web/src/__tests__/integration/epic-1-story-1-home-page-setup.test.tsx"
+    "web/src/__tests__/integration/epic-1-story-2-create-new-batch.test.tsx",
+    "web/src/components/ui/dialog.tsx",
+    "web/src/components/ui/popover.tsx",
+    "web/src/components/ui/sonner.tsx",
+    "web/package.json"
   ],
   "automatedChecks": {
-    "linting": {
-      "status": "PASSED",
-      "command": "npm run lint",
-      "exitCode": 0,
-      "notes": "No linting errors found"
+    "build": {
+      "status": "PASS",
+      "note": "TypeScript compilation successful"
     },
-    "typeChecking": {
-      "status": "PASSED",
-      "command": "npm run build",
-      "exitCode": 0,
-      "notes": "TypeScript compilation successful"
+    "lint": {
+      "status": "PASS",
+      "note": "No linting errors"
     },
     "tests": {
-      "status": "PASSED",
-      "command": "npm test",
-      "exitCode": 0,
-      "notes": "All 92 tests passed, including 17 tests for Epic 1 Story 1"
+      "status": "FAIL",
+      "note": "Story 2 tests pass (24/24), but Story 1 tests fail (17/17) - regression issue"
     },
     "testQuality": {
-      "status": "PASSED",
-      "command": "npm run test:quality",
-      "exitCode": 0,
-      "notes": "No test quality issues found"
+      "status": "PASS",
+      "note": "Test quality validator passed"
     }
   },
-  "criticalIssues": [],
+  "criticalIssues": [
+    {
+      "severity": "CRITICAL",
+      "category": "REGRESSION",
+      "title": "Story 2 implementation broke Story 1 tests",
+      "description": "Adding useToast() hook to page.tsx causes all Story 1 tests to fail because they don't wrap the component in ToastProvider",
+      "location": "web/src/app/page.tsx:25",
+      "impact": "All 17 tests from Story 1 are now failing. This is a test regression that must be fixed.",
+      "recommendation": "Update Story 1 test file (epic-1-story-1-home-page-setup.test.tsx) to use the same TestWrapper pattern with ToastProvider that Story 2 tests use. This is a test-only fix - no production code changes needed."
+    }
+  ],
   "highPriorityIssues": [],
   "suggestions": [
     {
-      "category": "Navigation",
-      "description": "Navigation links use <a> tags with href attributes instead of Next.js Link components",
-      "file": "web/src/app/page.tsx",
-      "lines": [14, 20],
-      "impact": "Low - Works correctly but Next.js Link provides better performance with client-side navigation",
-      "suggestedFix": "Consider using next/link for internal navigation in future refactoring"
-    },
-    {
-      "category": "Accessibility",
-      "description": "Top navigation bar could benefit from an aria-label for better screen reader context",
-      "file": "web/src/app/page.tsx",
-      "line": 8,
-      "impact": "Low - Navigation landmark is already present, but explicit label would enhance clarity",
-      "suggestedFix": "Add aria-label=\"Main navigation\" to the nav element"
+      "category": "CODE_QUALITY",
+      "title": "Consider extracting dialog state logic",
+      "description": "The dialog management logic in page.tsx could be extracted into a custom hook for better reusability",
+      "location": "web/src/app/page.tsx",
+      "recommendation": "Not blocking for this story, but consider for future refactoring"
     }
   ],
-  "securityReview": {
-    "xssVulnerabilities": "NONE",
-    "hardcodedSecrets": "NONE",
-    "rbacChecks": "N/A - Static page, no protected data",
-    "inputValidation": "N/A - No user input in this story",
-    "notes": "No security concerns - static layout only"
-  },
-  "codeQualityChecks": {
-    "noAnyTypes": "PASSED - No 'any' types found",
-    "noErrorSuppressions": "PASSED - No suppressions found",
-    "properTyping": "PASSED - Component properly typed",
-    "serverClientComponents": "PASSED - Correctly uses server component (no 'use client' needed)",
-    "reactPatterns": "PASSED - Follows React 19 conventions",
-    "functionSize": "PASSED - All code is concise and readable",
-    "errorHandling": "N/A - Static component, errors handled by Next.js error boundary",
-    "gitHygiene": "PASSED - .claude/logs/ not in .gitignore (correctly tracked)"
-  },
-  "accessibilityChecks": {
-    "semanticHtml": "PASSED - Uses nav, main, section elements appropriately",
-    "ariaLabels": "PASSED - Sections have aria-label attributes",
-    "headingHierarchy": "PASSED - h1 for main heading, h2 for section headings",
-    "keyboardNavigation": "PASSED - All interactive elements are keyboard accessible",
-    "axeViolations": "PASSED - Automated accessibility tests pass"
-  },
+  "positiveFindings": [
+    "No error suppressions (@ts-expect-error, @ts-ignore, eslint-disable)",
+    "Proper TypeScript typing throughout",
+    "Uses API client from lib/api/client.ts (no raw fetch)",
+    "Uses Shadcn UI components (Dialog, Input, Label, Button)",
+    "Implements all acceptance criteria from story file",
+    "Proper error handling with specific error messages",
+    "Loading states with spinner and disabled buttons",
+    "Accessibility attributes (aria-busy, aria-labelledby, aria-modal)",
+    "Story 2 tests follow best practices (user-observable behavior, no implementation details)",
+    "Test quality validator passes with no anti-patterns detected",
+    "Proper use of Toast notifications for user feedback",
+    "Dialog closes on success, stays open on error per requirements",
+    "Network error vs API error differentiation"
+  ],
   "testCoverage": {
-    "happyPath": "PASSED - All acceptance criteria tested",
-    "edgeCases": "PASSED - Responsive layout tests included",
-    "errorHandling": "PASSED - Error boundary test included",
-    "accessibility": "PASSED - Comprehensive accessibility test suite",
-    "testQuality": "PASSED - Tests focus on user behavior, not implementation details",
-    "notes": "17 tests covering all acceptance criteria with proper use of semantic queries"
-  },
-  "acceptanceCriteria": {
-    "allCriteriaMet": true,
-    "details": [
-      {
-        "criterion": "InvestInsight as main heading",
-        "status": "MET",
-        "verified": "Code and tests confirm h1 with InvestInsight text"
-      },
-      {
-        "criterion": "Top navigation bar with Dashboard, Data Confirmation, Maintenance, User sections",
-        "status": "MET",
-        "verified": "All four navigation elements present and tested"
-      },
-      {
-        "criterion": "Template placeholder removed",
-        "status": "MET",
-        "verified": "Template text replaced with InvestInsight layout"
-      },
-      {
-        "criterion": "Three main sections visible",
-        "status": "MET",
-        "verified": "Current Batch Status, Quick Navigation, and Batch History sections present with aria-labels"
-      },
-      {
-        "criterion": "Responsive layout on mobile",
-        "status": "MET",
-        "verified": "Tests verify layout works at multiple viewport sizes"
-      },
-      {
-        "criterion": "Layout responds to window resize",
-        "status": "MET",
-        "verified": "Tests verify responsive behavior"
-      },
-      {
-        "criterion": "Error boundary on page load failure",
-        "status": "MET",
-        "verified": "Test verifies component renders without throwing errors"
+    "story2Tests": {
+      "total": 24,
+      "passed": 24,
+      "failed": 0,
+      "categories": [
+        "Happy Path (8 tests)",
+        "Edge Cases (5 tests)",
+        "Error Handling (5 tests)",
+        "Accessibility (6 tests)"
+      ]
+    },
+    "regressionTests": {
+      "story1Tests": {
+        "total": 17,
+        "passed": 0,
+        "failed": 17,
+        "note": "All failing due to missing ToastProvider in test setup"
       }
-    ]
+    }
   },
-  "recommendation": "APPROVED",
-  "summary": "Implementation meets all acceptance criteria with high code quality. No critical or high-priority issues found. Two minor suggestions for future enhancement.",
-  "manualVerificationRequired": true,
-  "reviewedBy": "Claude Code - code-reviewer agent",
-  "reviewedAt": "2026-02-04T09:30:00.000Z"
+  "verdict": "FAIL",
+  "reason": "Critical regression: Story 2 implementation broke all Story 1 tests. Must fix test setup before proceeding.",
+  "nextSteps": [
+    "Fix Story 1 test file to wrap HomePage in ToastProvider",
+    "Re-run all tests to verify fix",
+    "Proceed to VERIFY phase after tests pass"
+  ]
 }

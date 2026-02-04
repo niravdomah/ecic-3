@@ -11,11 +11,28 @@ import { render, screen, within } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { axe } from 'vitest-axe';
 import HomePage from '@/app/page';
+import { ToastProvider } from '@/contexts/ToastContext';
+import { ToastContainer } from '@/components/toast/ToastContainer';
+
+// Wrapper component to provide context (required since Story 2 added toast functionality)
+function TestWrapper({ children }: { children: React.ReactNode }) {
+  return (
+    <ToastProvider>
+      {children}
+      <ToastContainer />
+    </ToastProvider>
+  );
+}
+
+// Helper function to render with providers
+function renderWithProviders(ui: React.ReactElement) {
+  return render(ui, { wrapper: TestWrapper });
+}
 
 describe('HomePage - Start Page Layout', () => {
   describe('Happy Path - Core Layout Elements', () => {
     it('displays "InvestInsight" as the main heading', () => {
-      render(<HomePage />);
+      renderWithProviders(<HomePage />);
 
       const heading = screen.getByRole('heading', {
         name: /investinsight/i,
@@ -25,7 +42,7 @@ describe('HomePage - Start Page Layout', () => {
     });
 
     it('shows top navigation bar with Dashboard section', () => {
-      render(<HomePage />);
+      renderWithProviders(<HomePage />);
 
       const nav = screen.getByRole('navigation');
       const dashboardLink = within(nav).getByRole('link', {
@@ -35,7 +52,7 @@ describe('HomePage - Start Page Layout', () => {
     });
 
     it('shows top navigation bar with Data Confirmation section', () => {
-      render(<HomePage />);
+      renderWithProviders(<HomePage />);
 
       const nav = screen.getByRole('navigation');
       const dataConfirmationLink = within(nav).getByRole('link', {
@@ -45,7 +62,7 @@ describe('HomePage - Start Page Layout', () => {
     });
 
     it('shows top navigation bar with Maintenance menu', () => {
-      render(<HomePage />);
+      renderWithProviders(<HomePage />);
 
       const nav = screen.getByRole('navigation');
       // Maintenance menu could be a button (dropdown trigger) or link
@@ -56,7 +73,7 @@ describe('HomePage - Start Page Layout', () => {
     });
 
     it('shows top navigation bar with User profile section', () => {
-      render(<HomePage />);
+      renderWithProviders(<HomePage />);
 
       const nav = screen.getByRole('navigation');
       // User profile could be a button (dropdown trigger) or link
@@ -67,7 +84,7 @@ describe('HomePage - Start Page Layout', () => {
     });
 
     it('does not display the template placeholder text', () => {
-      render(<HomePage />);
+      renderWithProviders(<HomePage />);
 
       const placeholder = screen.queryByText(
         /replace this with your feature implementation/i,
@@ -76,7 +93,7 @@ describe('HomePage - Start Page Layout', () => {
     });
 
     it('displays Current Batch Status section', () => {
-      render(<HomePage />);
+      renderWithProviders(<HomePage />);
 
       const batchStatusSection = screen.getByRole('region', {
         name: /current batch status/i,
@@ -85,7 +102,7 @@ describe('HomePage - Start Page Layout', () => {
     });
 
     it('displays Quick Navigation section', () => {
-      render(<HomePage />);
+      renderWithProviders(<HomePage />);
 
       const quickNavSection = screen.getByRole('region', {
         name: /quick navigation/i,
@@ -94,7 +111,7 @@ describe('HomePage - Start Page Layout', () => {
     });
 
     it('displays Batch History section', () => {
-      render(<HomePage />);
+      renderWithProviders(<HomePage />);
 
       const batchHistorySection = screen.getByRole('region', {
         name: /batch history/i,
@@ -110,7 +127,7 @@ describe('HomePage - Start Page Layout', () => {
       global.innerHeight = 667;
       global.dispatchEvent(new Event('resize'));
 
-      const { container } = render(<HomePage />);
+      const { container } = renderWithProviders(<HomePage />);
 
       // Verify core elements still render
       expect(
@@ -126,7 +143,7 @@ describe('HomePage - Start Page Layout', () => {
       global.innerHeight = 1024;
       global.dispatchEvent(new Event('resize'));
 
-      const { container } = render(<HomePage />);
+      const { container } = renderWithProviders(<HomePage />);
 
       // Verify core elements still render
       expect(
@@ -142,7 +159,7 @@ describe('HomePage - Start Page Layout', () => {
       global.innerHeight = 1080;
       global.dispatchEvent(new Event('resize'));
 
-      const { container } = render(<HomePage />);
+      const { container } = renderWithProviders(<HomePage />);
 
       // Verify core elements still render
       expect(
@@ -160,21 +177,21 @@ describe('HomePage - Start Page Layout', () => {
       // 1. Error boundary wrapper in layout.tsx or app wrapper
       // 2. Forcing an error condition in the component
       // For now, we verify the component renders without throwing
-      const { container } = render(<HomePage />);
+      const { container } = renderWithProviders(<HomePage />);
       expect(container).toBeTruthy();
     });
   });
 
   describe('Accessibility', () => {
     it('has no accessibility violations', async () => {
-      const { container } = render(<HomePage />);
+      const { container } = renderWithProviders(<HomePage />);
       const results = await axe(container);
       expect(results).toHaveProperty('violations');
       expect(results.violations).toHaveLength(0);
     });
 
     it('has proper heading hierarchy', () => {
-      render(<HomePage />);
+      renderWithProviders(<HomePage />);
 
       // Main heading should be h1
       const mainHeading = screen.getByRole('heading', {
@@ -189,14 +206,14 @@ describe('HomePage - Start Page Layout', () => {
     });
 
     it('has proper navigation landmark', () => {
-      render(<HomePage />);
+      renderWithProviders(<HomePage />);
 
       const nav = screen.getByRole('navigation');
       expect(nav).toBeInTheDocument();
     });
 
     it('has proper region landmarks for main sections', () => {
-      render(<HomePage />);
+      renderWithProviders(<HomePage />);
 
       const regions = screen.getAllByRole('region');
       expect(regions.length).toBeGreaterThanOrEqual(3);
