@@ -16,3 +16,19 @@ export interface ReportBatch {
 export interface ReportBatchesResponse {
   MonthlyReportBatches: ReportBatch[];
 }
+
+export interface ApprovalLog {
+  Id: number;
+  ReportBatchId: number;
+  ReportDate: string;
+  Type: string;
+  IsApproved: boolean;
+  User: string;
+  UserName?: string; // API spec uses UserName, keep both for compatibility
+  Time: string;
+  RejectReason: string;
+}
+
+export interface ApprovalLogsResponse {
+  ApproveLogs: ApprovalLog[];
+}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { Loader2, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -16,9 +16,12 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { CurrentBatchStatus } from '@/components/CurrentBatchStatus';
+import { BatchHistoryTable } from '@/components/BatchHistoryTable';
 import { post } from '@/lib/api/client';
+import { getReportBatches } from '@/lib/api/report-batches';
 import { useToast } from '@/contexts/ToastContext';
 import type { APIError } from '@/types/api';
+import type { ReportBatch } from '@/types/report-batch';
 
 // Navigation cards configuration
 const navigationCards = [
@@ -59,6 +62,29 @@ export default function HomePage() {
   const [reportDate, setReportDate] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { showToast } = useToast();
+
+  // Shared batch data state
+  const [batches, setBatches] = useState<ReportBatch[]>([]);
+  const [isBatchesLoading, setIsBatchesLoading] = useState(true);
+  const [batchesError, setBatchesError] = useState<string | null>(null);
+
+  const fetchBatches = useCallback(async () => {
+    setIsBatchesLoading(true);
+    setBatchesError(null);
+    try {
+      const response = await getReportBatches();
+      setBatches(response.MonthlyReportBatches);
+    } catch {
+      setBatchesError('Failed to load data');
+      setBatches([]);
+    } finally {
+      setIsBatchesLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchBatches();
+  }, [fetchBatches]);
 
   const handleCreateBatch = async () => {
     if (!reportDate) {
@@ -162,7 +188,12 @@ export default function HomePage() {
                 Create New Batch
               </Button>
             </div>
-            <CurrentBatchStatus />
+            <CurrentBatchStatus
+              batches={batches}
+              isLoading={isBatchesLoading}
+              error={batchesError}
+              onRetry={fetchBatches}
+            />
           </section>
 
           {/* Quick Navigation Section */}
@@ -177,7 +208,7 @@ export default function HomePage() {
                   <Link
                     href={card.href}
                     aria-label={card.title}
-                    className="block h-full rounded-lg transition-all hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                    className="block h-full rounded-lg transition-all hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                   >
                     <Card className="h-full p-6 hover:shadow-lg hover:border-primary/50 transition-all cursor-pointer">
                       <div className="flex items-start justify-between">
@@ -200,12 +231,21 @@ export default function HomePage() {
 
           {/* Batch History Section */}
           <section aria-label="Batch History" className="space-y-4">
-            <h2 className="text-xl font-semibold">Batch History</h2>
-            <Card className="p-6">
-              <p className="text-muted-foreground">
-                Batch history table will appear here.
-              </p>
-            </Card>
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold">Batch History</h2>
+              <Link
+                href="/batch-history"
+                className="text-sm font-medium text-primary hover:underline flex items-center gap-1"
+              >
+                View All <ArrowRight className="size-4" />
+              </Link>
+            </div>
+            <BatchHistoryTable
+              batches={batches}
+              isLoading={isBatchesLoading}
+              error={batchesError}
+              onRetry={fetchBatches}
+            />
           </section>
         </div>
       </main>

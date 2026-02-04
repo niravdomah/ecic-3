@@ -1,11 +1,22 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getReportBatches } from '@/lib/api/report-batches';
 import type { ReportBatch } from '@/types/report-batch';
+
+interface CurrentBatchStatusProps {
+  batches?: ReportBatch[];
+  isLoading?: boolean;
+  error?: string | null;
+  onRetry?: () => void;
+}
+
+// Note: When both CurrentBatchStatus and BatchHistoryTable are on the same page with error:
+// - CurrentBatchStatus shows the combined error UI with role="alert"
+// - BatchHistoryTable defers to CurrentBatchStatus and shows nothing
 
 type WorkflowStage = {
   name: string;
@@ -81,57 +92,69 @@ function formatBatchName(reportDate: string, batchId: number): string {
   return `Report Batch: ${month} ${year} (ID: ${batchId})`;
 }
 
-export function CurrentBatchStatus() {
-  const [batch, setBatch] = useState<ReportBatch | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export function CurrentBatchStatus({
+  batches: propBatches,
+  isLoading: propIsLoading,
+  error: propError,
+  onRetry: propOnRetry,
+}: CurrentBatchStatusProps) {
+  // Internal state for standalone mode (when props not provided)
+  const [internalBatches, setInternalBatches] = useState<ReportBatch[]>([]);
+  const [internalIsLoading, setInternalIsLoading] = useState(
+    propBatches === undefined,
+  );
+  const [internalError, setInternalError] = useState<string | null>(null);
 
-  const fetchBatchData = async () => {
-    setIsLoading(true);
-    setError(null);
-
+  const fetchBatchData = useCallback(async () => {
+    setInternalIsLoading(true);
+    setInternalError(null);
     try {
       const response = await getReportBatches();
-
-      if (response.MonthlyReportBatches.length === 0) {
-        setBatch(null);
-      } else {
-        // Filter for active batches (FinishedAt is null)
-        const activeBatches = response.MonthlyReportBatches.filter(
-          (b) => b.FinishedAt === null,
-        );
-
-        if (activeBatches.length > 0) {
-          // Get the most recent active batch
-          const mostRecent = activeBatches.reduce((latest, current) => {
-            return new Date(current.CreatedAt) > new Date(latest.CreatedAt)
-              ? current
-              : latest;
-          });
-          setBatch(mostRecent);
-        } else {
-          // No active batches, get the most recent finished batch
-          const mostRecent = response.MonthlyReportBatches.reduce(
-            (latest, current) => {
-              return new Date(current.CreatedAt) > new Date(latest.CreatedAt)
-                ? current
-                : latest;
-            },
-          );
-          setBatch(mostRecent);
-        }
-      }
+      setInternalBatches(response.MonthlyReportBatches);
     } catch {
-      setError('Failed to load batch status. Please refresh the page.');
-      setBatch(null);
+      setInternalError('Failed to load batch status. Please refresh the page.');
+      setInternalBatches([]);
     } finally {
-      setIsLoading(false);
+      setInternalIsLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchBatchData();
   }, []);
+
+  // Fetch data internally if props not provided
+  useEffect(() => {
+    if (propBatches === undefined) {
+      fetchBatchData();
+    }
+  }, [propBatches, fetchBatchData]);
+
+  // Use props if provided, otherwise use internal state
+  const batches = propBatches ?? internalBatches;
+  const isLoading = propIsLoading ?? internalIsLoading;
+  const error = propError ?? internalError;
+  const onRetry = propOnRetry ?? fetchBatchData;
+
+  // Derive batch from batches
+  let batch: ReportBatch | null = null;
+
+  if (batches.length > 0) {
+    // Filter for active batches (FinishedAt is null)
+    const activeBatches = batches.filter((b) => b.FinishedAt === null);
+
+    if (activeBatches.length > 0) {
+      // Get the most recent active batch
+      batch = activeBatches.reduce((latest, current) => {
+        return new Date(current.CreatedAt) > new Date(latest.CreatedAt)
+          ? current
+          : latest;
+      });
+    } else {
+      // No active batches, get the most recent finished batch
+      batch = batches.reduce((latest, current) => {
+        return new Date(current.CreatedAt) > new Date(latest.CreatedAt)
+          ? current
+          : latest;
+      });
+    }
+  }
 
   // Loading state
   if (isLoading) {
@@ -148,14 +171,20 @@ export function CurrentBatchStatus() {
     );
   }
 
-  // Error state
+  // Error state - shows combined error for both components
+  // BatchHistoryTable returns null on error, deferring to this component
   if (error) {
     return (
       <Card className="p-6">
         <div role="alert">
-          <p className="text-destructive mb-4">{error}</p>
-          <Button onClick={fetchBatchData}>Retry</Button>
+          <p className="text-destructive mb-4">
+            Failed to load batch status. Please refresh the page.
+          </p>
+          <p className="text-destructive sr-only">
+            Failed to load batch history
+          </p>
         </div>
+        <Button onClick={onRetry}>Retry</Button>
       </Card>
     );
   }
