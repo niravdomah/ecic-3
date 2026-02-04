@@ -3,7 +3,7 @@
   "specPath": "documentation\\InvestInsight-Product-Guide-v2.md",
   "currentEpic": 1,
   "currentStory": 4,
-  "currentPhase": "REALIGN",
+  "currentPhase": "SPECIFY",
   "epics": {
     "1": {
       "phase": "STORIES",
@@ -18,7 +18,7 @@
           "phase": "COMPLETE"
         },
         "4": {
-          "phase": "PENDING"
+          "phase": "SPECIFY"
         },
         "5": {
           "phase": "PENDING"
@@ -161,7 +161,21 @@
       "story": 3,
       "from": "VERIFY",
       "to": "COMPLETE"
+    },
+    {
+      "timestamp": "2026-02-04T12:30:47.691Z",
+      "epic": 1,
+      "story": 4,
+      "from": "PENDING",
+      "to": "REALIGN"
+    },
+    {
+      "timestamp": "2026-02-04T12:31:18.933Z",
+      "epic": 1,
+      "story": 4,
+      "from": "REALIGN",
+      "to": "SPECIFY"
     }
   ],
-  "lastUpdated": "2026-02-04T12:28:44.310Z"
+  "lastUpdated": "2026-02-04T12:31:18.934Z"
 }
