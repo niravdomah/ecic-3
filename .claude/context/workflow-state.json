@@ -2,8 +2,8 @@
   "featureName": "InvestInsight-Product-Guide-v2",
   "specPath": "documentation\\InvestInsight-Product-Guide-v2.md",
   "currentEpic": 1,
-  "currentStory": 4,
-  "currentPhase": "VERIFY",
+  "currentStory": 5,
+  "currentPhase": "SPECIFY",
   "epics": {
     "1": {
       "phase": "STORIES",
@@ -18,10 +18,10 @@
           "phase": "COMPLETE"
         },
         "4": {
-          "phase": "VERIFY"
+          "phase": "COMPLETE"
         },
         "5": {
-          "phase": "PENDING"
+          "phase": "SPECIFY"
         }
       },
       "totalStories": 5
@@ -196,7 +196,21 @@
       "story": 4,
       "from": "REVIEW",
       "to": "VERIFY"
+    },
+    {
+      "timestamp": "2026-02-04T13:29:04.072Z",
+      "epic": 1,
+      "story": 4,
+      "from": "VERIFY",
+      "to": "COMPLETE"
+    },
+    {
+      "timestamp": "2026-02-04T13:31:57.041Z",
+      "epic": 1,
+      "story": 5,
+      "from": "PENDING",
+      "to": "SPECIFY"
     }
   ],
-  "lastUpdated": "2026-02-04T13:24:58.431Z"
+  "lastUpdated": "2026-02-04T13:31:57.042Z"
 }
