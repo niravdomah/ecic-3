@@ -32,8 +32,16 @@ export default function HomePage() {
 
     setIsLoading(true);
 
+    // Transform selected date to last day of the month (API expects month-end dates)
+    // Parse date parts directly to avoid timezone issues
+    const [year, month] = reportDate.split('-').map(Number);
+    const lastDayOfMonth = new Date(Date.UTC(year, month, 0));
+    const formattedDate = lastDayOfMonth.toISOString().split('T')[0];
+
     try {
-      await post<{ message: string }>(`/monthly-runs/${reportDate}`);
+      await post<{ message: string }>('/monthly-report-batch', {
+        ReportDate: formattedDate,
+      });
 
       showToast({
         variant: 'success',

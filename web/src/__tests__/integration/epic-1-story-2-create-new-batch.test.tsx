@@ -179,7 +179,7 @@ describe('HomePage - Create New Batch', () => {
       });
     });
 
-    it('calls POST /monthly-runs/{ReportDate} with correct date format', async () => {
+    it('calls POST /monthly-report-batch with correct date format', async () => {
       const user = userEvent.setup();
       mockPost.mockResolvedValue(createMockSuccessResponse());
 
@@ -197,7 +197,9 @@ describe('HomePage - Create New Batch', () => {
       await user.click(confirmButton);
 
       await waitFor(() => {
-        expect(mockPost).toHaveBeenCalledWith('/monthly-runs/2026-03-31');
+        expect(mockPost).toHaveBeenCalledWith('/monthly-report-batch', {
+          ReportDate: '2026-03-31',
+        });
       });
     });
 
