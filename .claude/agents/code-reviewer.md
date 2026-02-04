@@ -69,6 +69,10 @@ Reviews code changes for the current story's implementation. Provides constructi
 ### 4. Project Patterns
 
 - [ ] API client used (not raw fetch)
+- [ ] **API calls match OpenAPI spec** (if spec exists in `documentation/`)
+  - Endpoint path and HTTP method match spec
+  - Request/response types match spec schemas
+  - No invented endpoints (if endpoint not in spec, flag it)
 - [ ] Types defined in `types/` directory
 - [ ] API functions in `lib/api/` directory
 - [ ] Shadcn UI components used (not custom recreations)

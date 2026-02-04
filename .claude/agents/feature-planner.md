@@ -67,7 +67,10 @@ generated-docs/stories/
 
 **Actions:**
 1. Read the feature specification
-2. Check for OpenAPI spec - if exists, extract endpoints, auth requirements, error formats. **Never invent endpoints.**
+2. **Check for OpenAPI spec** in `documentation/*.yaml` or `documentation/api/*.yaml`:
+   - If found: Extract endpoints, auth requirements, error formats. Note the API base URL.
+   - **Never invent endpoints** - only reference what the spec defines
+   - If a feature requires an endpoint not in the spec, flag this and ask the user
 3. Check for wireframes - note available screens
 4. Ask clarifying questions if unclear (roles, error handling, data sources, missing endpoints)
 

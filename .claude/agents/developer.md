@@ -94,6 +94,8 @@ git pull origin main
   - Use server components by default, add `"use client"` only when needed
   - Always use Shadcn UI components via MCP server (`mcp__shadcn__add_component`)
   - Use the API client in `lib/api/client.ts` for all API calls
+  - **Check `documentation/` for OpenAPI specs BEFORE implementing any API call**
+  - Verify endpoint path, method, request/response types against the spec
   - Create types in `types/`, API functions in `lib/api/`
   - Use path aliases (`@/`) for all imports
 - **Do NOT write new tests** - tests already exist from test-generator (SPECIFY phase)
@@ -307,6 +309,15 @@ Additional standards:
 - If dependencies are missing, identify them and ask how to proceed
 - If tests fail, investigate and fix before committing
 - If the implementation reveals issues with the plan, communicate them to the user
+
+### API Error Handling (During Manual Testing)
+
+If API calls fail during user preview (404, 500, connection errors):
+
+1. **Report the actual error** - Don't dismiss or rationalize it
+2. **Reference the OpenAPI spec** - What endpoint should exist?
+3. **Ask the user** about backend status - Don't assume whether a backend exists or not
+4. **Never say** "this is expected because there's no backend" - let the user determine the cause
 
 Remember: Your primary goal is controlled, high-quality implementation with human review gates. Quality and approval matter more than speed.
 

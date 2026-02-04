@@ -172,6 +172,13 @@ For detailed testing guidelines (query priority, what not to test, etc.), see CL
 
 ## Mock Data Accuracy
 
+**IMPORTANT:** Before creating any API mocks, check `documentation/` for OpenAPI specs.
+
+1. **Locate the OpenAPI spec** in `documentation/*.yaml` or `documentation/api/*.yaml`
+2. **Extract endpoint details** - path, method, request/response schemas
+3. **Check for sample data** in `documentation/` - may contain real API responses
+4. **Use the spec as source of truth** for mock data factories
+
 API specs don't always reflect reality (string enums, unexpected nulls, extra fields). To ensure mock data matches actual API responses:
 
 1. **Check for sample data** in `documentation/` - may contain real API responses

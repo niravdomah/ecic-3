@@ -88,7 +88,38 @@ export const createUser = (data: CreateUserRequest) =>
 - Query parameters and request bodies
 - Error response shapes
 
-### 4. No Error Suppressions
+### 4. API Spec Detection (Multi-Layer)
+
+**Never assume** that a backend does not exist. Use this detection system:
+
+**Layer 1 - Early Detection (at workflow start):**
+Before implementing any API-related features, check `documentation/` for:
+- OpenAPI specs (`*.yaml`, `*.json` with openapi/swagger content)
+- API documentation files
+
+If found: A backend API is expected. Note the base URL, endpoints, and ports.
+
+**Layer 2 - Pre-Implementation (before writing API calls):**
+When a story involves API calls:
+1. Locate the relevant OpenAPI spec
+2. Verify the endpoint path, method, request/response types
+3. Check the configured API base URL in the codebase
+
+**Layer 3 - Error Handling (when API calls fail):**
+If an API call returns an error (404, 500, connection refused, etc.):
+1. Report the actual error accurately
+2. Reference what the OpenAPI spec says the endpoint should be
+3. Ask the user about backend status - don't guess or rationalize
+
+**Never dismiss API errors.** Possible causes include:
+- Backend server isn't running
+- Endpoint isn't implemented yet
+- Endpoint path/method doesn't match the spec
+- No backend exists for this project
+
+Let the user determine the cause.
+
+### 5. No Error Suppressions
 
 **Never use suppression directives:**
 
@@ -97,11 +128,11 @@ export const createUser = (data: CreateUserRequest) =>
 
 Fix errors properly. Suppressions hide problems and accumulate technical debt.
 
-### 5. Quality Gates Are Binary
+### 6. Quality Gates Are Binary
 
 Report actual exit codes truthfully. Never rationalize failures as "expected" or "acceptable." Let the user decide whether to proceed.
 
-### 6. Test Quality Must Pass
+### 7. Test Quality Must Pass
 
 `npm run test:quality` must always pass. Anti-patterns in test files (even skipped tests) will fail CI/CD. In TDD, failing tests create expected TypeScript errors, but this still counts as a failed quality gate until implementation is complete.
 
